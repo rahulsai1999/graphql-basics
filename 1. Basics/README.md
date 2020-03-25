@@ -127,3 +127,35 @@ type Post {
   author: Person!
 }
 ```
+
+## Big Picture (Architecture)
+
+### Use Cases
+
+- **GraphQL server with a connected database**
+  - When a query arrives at the GraphQL server, the server reads the query’s payload and fetches the required information from the database.
+  - This is called resolving the query. It then constructs the response object as described in the official specification and returns it to the client.
+- **GraphQL server as a thin layer** to multiple third party or legacy systems integrated through a single GraphQL API
+- **Hybrid approach of connected database and third party systems** accessed through the same GraphQL API
+
+### Resolver functions
+
+- To gain the flexibility of GraphQL, it is necessary to define a proper resolver functions.
+- The sole purpose of a resolver function is to fetch the data for its field.
+- When the server receives a query, it will call all the functions for the fields that are specified in the query’s payload.
+- It thus resolves the query and is able to retrieve the correct data for each field.
+- Once all resolvers returned, the server will package data up in the format that was described by the query and send it back to the client.
+
+### GraphQL client libraries
+
+Instead of executing normal REST API calls that involves :
+
+- construct and send HTTP request (e.g. with fetch in Javascript)
+- receive and parse server response
+- store data locally (either simply in memory or persistent)
+- display data in the UI
+
+GraphQL client libraries like Relay and Apollo allow us to :
+
+- define data requirements
+- display data in UI
