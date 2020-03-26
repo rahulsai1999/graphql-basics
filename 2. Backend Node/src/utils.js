@@ -11,4 +11,4 @@ const getUserId = context => {
   console.log("Not authenticated");
 };
 
-export { getUserId, getUserId };
+export { getUserId, APP_SECRET };
