@@ -22,13 +22,13 @@ const Mutate = props => {
         <input
           className="mb2"
           type="text"
-          onChange={setDesc}
+          onChange={e => setDesc(e.target.value)}
           placeholder="Description for the URL"
         />
         <input
           className="mb2"
           type="text"
-          onChange={setUrl}
+          onChange={e => setUrl(e.target.value)}
           placeholder="Actual URL"
         />
       </div>
