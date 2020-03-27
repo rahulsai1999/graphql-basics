@@ -19,6 +19,20 @@ async function login(parent, args, context, info) {
   return { token, user };
 }
 
+async function vote(parent, args, context, info) {
+  const userId = getUserId(context);
+  const voteExists = await context.prisma.$exists.vote({
+    user: { id: userId },
+    link: { id: args.linkId }
+  });
+  if (voteExists) console.log(`Already voted for link: ${args.linkId}`);
+
+  return context.prisma.createVote({
+    user: { connect: { id: userId } },
+    link: { connect: { id: args.linkId } }
+  });
+}
+
 const post = (parent, args, context, info) => {
   const userId = getUserId(context);
   return context.prisma.createLink({
@@ -28,4 +42,4 @@ const post = (parent, args, context, info) => {
   });
 };
 
-export { signup, login, post };
+export { signup, login, post, vote };
