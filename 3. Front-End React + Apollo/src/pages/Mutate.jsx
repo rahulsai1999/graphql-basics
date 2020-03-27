@@ -13,7 +13,7 @@ const POST_MUTATION = gql`
 `;
 
 const Mutate = props => {
-  const [desc, setDesc] = useState("");
+  const [description, setDesc] = useState("");
   const [url, setUrl] = useState("");
 
   return (
@@ -34,7 +34,7 @@ const Mutate = props => {
       </div>
       <Mutation
         mutation={POST_MUTATION}
-        variables={{ desc, url }}
+        variables={{ description, url }}
         onCompleted={() => props.history.push("/")}
       >
         {postMutation => <button onClick={postMutation}>Submit</button>}
