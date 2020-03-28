@@ -10,12 +10,31 @@ const FEED_QUERY = gql`
         id
         url
         description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
       }
     }
   }
 `;
 
 const LinkList = props => {
+  const _updateCacheAfterVote = (store, createVote, linkId) => {
+    const data = store.readQuery({ query: FEED_QUERY });
+
+    const votedLink = data.feed.links.find(link => link.id === linkId);
+    votedLink.votes = createVote.link.votes;
+
+    store.writeQuery({ query: FEED_QUERY, data });
+  };
+
   return (
     <Query query={FEED_QUERY}>
       {({ loading, error, data }) => {
@@ -25,8 +44,13 @@ const LinkList = props => {
         const links = data.feed.links;
         return (
           <div>
-            {links.map(link => (
-              <Link key={link.id} link={link} />
+            {links.map((link, index) => (
+              <Link
+                key={link.id}
+                link={link}
+                index={index}
+                updateStoreAfterVote={_updateCacheAfterVote}
+              />
             ))}
           </div>
         );

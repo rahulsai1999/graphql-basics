@@ -12,6 +12,28 @@ const POST_MUTATION = gql`
   }
 `;
 
+const FEED_QUERY = gql`
+  {
+    feed {
+      links {
+        id
+        url
+        description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 const Mutate = props => {
   const [description, setDesc] = useState("");
   const [url, setUrl] = useState("");
@@ -36,6 +58,14 @@ const Mutate = props => {
         mutation={POST_MUTATION}
         variables={{ description, url }}
         onCompleted={() => props.history.push("/")}
+        update={(store, { data: { post } }) => {
+          const data = store.readQuery({ query: FEED_QUERY });
+          data.feed.links.unshift(post);
+          store.writeQuery({
+            query: FEED_QUERY,
+            data
+          });
+        }}
       >
         {postMutation => <button onClick={postMutation}>Submit</button>}
       </Mutation>
